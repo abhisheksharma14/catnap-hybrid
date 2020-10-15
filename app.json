@@ -1,12 +1,26 @@
 {
   "name": "catnap",
-  "displayName": "catnap",
+  "displayName": "CatNap",
   "expo": {
-    "name": "catnap",
-    "slug": "catnap",
+    "name": "CatNap",
+    "slug": "CatNap",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "ios": {
+      "bundleIdentifier": "com.catnap.catnap",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.catnap.catnap",
+      "versionCode": 1
+    },
+    "icon": "./src/assets/images/catnap.png",
+    "splash": {
+      "image": "./src/assets/images/catnap.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FFFFFF"
+    }
   }
 }

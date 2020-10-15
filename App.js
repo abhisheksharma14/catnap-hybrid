@@ -1,21 +1,49 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator, HeaderBackButton } from '@react-navigation/stack';
+import {Image} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-export default function App() {
+import SplashScreen from "./src/screens/splash/Splash";
+import Home from "./src/screens/home/Home";
+
+const Stack = createStackNavigator();
+
+const HomeIcon = <Icon name="home" size={30} color="#4C4C4C" />;
+
+function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Splash">
+        <Stack.Screen name="Home" component={Home} mode="modal" options={{
+          headerLeft: (props) => (
+            <HeaderBackButton
+              {...props}
+              onPress={() => {
+                // do nothing
+              }}
+              backImage={props => HomeIcon}
+            />
+          ),
+        }}/>
+        <Stack.Screen name="Splash" component={SplashScreen}  options={{
+          headerTitle: props => <LogoTitle {...props} />,
+          headerTitleStyle: {
+            textAlign: 'center',
+          },
+        }}/>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+function LogoTitle() {
+  return (
+    <Image
+      style={{ width: 50, height: 50 }}
+      source={require('./src/assets/images/logo.png')}
+    />
+  );
+}
+
+export default App;
