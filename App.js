@@ -1,17 +1,28 @@
-import * as React from 'react';
+import React, {useEffect} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, HeaderBackButton } from '@react-navigation/stack';
-import {Image} from 'react-native';
+import {BackHandler, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import SplashScreen from "./src/screens/splash/Splash";
-import Home from "./src/screens/home/Home";
+import SplashScreen from "./src/screens/splash";
+import Home from "./src/screens/home";
+import * as Calendar from "expo-calendar";
 
 const Stack = createStackNavigator();
 
 const HomeIcon = <Icon name="home" size={30} color="#4C4C4C" />;
 
 function App() {
+  useEffect(() => {
+    (async () => {
+      const { status } = await Calendar.requestCalendarPermissionsAsync();
+      if (status === 'granted') {
+        const calendars = await Calendar.getCalendarsAsync();
+        console.log('Here are all your calendars:');
+        console.log({ calendars });
+      }
+    })();
+  })
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Splash">
