@@ -10,17 +10,26 @@
     ],
     "ios": {
       "bundleIdentifier": "com.catnap.catnap",
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.0",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "com.googleusercontent.apps.535966416800-gdisi2n3h6cbuc7gq618ibl0glfcqj5o"
+        }
+      }
     },
     "android": {
       "package": "com.catnap.catnap",
-      "versionCode": 1
+      "versionCode": 1,
+      "googleServicesFile": "./google-services.json"
     },
     "icon": "./src/assets/images/catnap.png",
     "splash": {
       "image": "./src/assets/images/catnap.png",
       "resizeMode": "contain",
       "backgroundColor": "#FFFFFF"
-    }
+    },
+    "facebookScheme": "fb623880944958754",
+    "facebookAppId": "623880944958754",
+    "facebookDisplayName": "Catnap"
   }
 }
