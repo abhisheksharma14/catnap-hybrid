@@ -1,8 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
-import React, {useEffect} from 'react';
-import {Image, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Image, View} from 'react-native';
 import { BackHandler, Alert } from 'react-native';
-import * as Calendar from 'expo-calendar';
+import { Card, ListItem, Text, Icon, Avatar } from 'react-native-elements'
+
+import * as DB from '../../services/db';
 
 export default function Home() {
   const exitDialog = () =>
@@ -20,20 +22,20 @@ export default function Home() {
       { cancelable: false }
     );
 
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', () => { exitDialog(); return true});
-    (async () => {
-      const { status } = await Calendar.requestCalendarPermissionsAsync();
-      if (status === 'granted') {
-        const calendars = await Calendar.getCalendarsAsync();
-        console.log('Here are all your calendars:');
-        console.log({ calendars });
-      }
-    })();
-    return BackHandler.removeEventListener('hardwareBackPress', () => true );
-  })
+  const [loading, setLoading] = useState(true);
+  const [calenders, setCalenders] = useState([]);
 
-  return (
+  useEffect(() => {
+    (async () => {
+      let calendarList =  await DB.getCalenders();
+      setCalenders(calendarList);
+      setLoading(false);
+    })();
+    BackHandler.addEventListener('hardwareBackPress', () => { exitDialog(); return true});
+    return BackHandler.removeEventListener('hardwareBackPress', () => true );
+  }, [])
+
+  return loading ? (
       <View
         style={{
           flex: 1,
@@ -43,7 +45,7 @@ export default function Home() {
           marginHorizontal: 40,
         }}>
         <Image
-          source={require('../../assets/images/logo.png',)}
+          source={require('../../assets/images/splash.gif',)}
           style={{ width: 100, height: 100 }}
         />
         <View style={{ margin: 10 }}>
@@ -54,5 +56,25 @@ export default function Home() {
         </View>
         <StatusBar style="auto" />
       </View>
+  ) : (
+    <View>
+      <Card >
+        <Card.Title><Text h4>Available Calenders</Text></Card.Title>
+        {
+          calenders.map((calendar, i) => {
+            return (
+              <ListItem key={i} bottomDivider>
+                <Avatar rounded title={calendar.title[0].toUpperCase()} containerStyle={{backgroundColor: calendar.color}}/>
+                <ListItem.Content>
+                  <ListItem.Title>{calendar.title}</ListItem.Title>
+                  <ListItem.Subtitle>{calendar.name}</ListItem.Subtitle>
+                </ListItem.Content>
+                <ListItem.Chevron />
+              </ListItem>
+            );
+          })
+        }
+      </Card>
+    </View>
   );
 }

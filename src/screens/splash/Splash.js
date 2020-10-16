@@ -1,8 +1,23 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { View, Text, Image } from 'react-native';
+import * as Calendar from "expo-calendar";
+import * as DB from '../../services/db';
 
 export default function Splash({ navigation }) {
-  setTimeout(() => navigation.navigate('Home'), 4000)
+  useEffect(() => {
+    (async () => {
+      await DB.init().catch(err => console.log("Inside init error block", err));
+      const { status } = await Calendar.requestCalendarPermissionsAsync();
+      if (status === 'granted') {
+        const calendars = await Calendar.getCalendarsAsync();
+        await DB.deleteCalenders();
+        calendars.map(async (calendar) => {
+          await DB.addCalender(calendar);
+        })
+      }
+      setTimeout(() => navigation.navigate('Home'), 4000)
+    })();
+  })
   return (
     <View
       style={{
