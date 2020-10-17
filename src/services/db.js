@@ -1,5 +1,5 @@
 import * as SQLite from 'expo-sqlite';
-const db = SQLite.openDatabase("catnap.db", 1.0);
+const db = SQLite.openDatabase("catnap.db", 1.1);
 
 export function init() {
   return new Promise((resolve, reject) => {
@@ -11,7 +11,8 @@ export function init() {
                     name text, 
                     color text,
                     source text,
-                    isSynced int
+                    isSynced int,
+                    enableSync int
                   );`,
         [],
         (txn, result) => resolve(result),
@@ -24,7 +25,7 @@ export function init() {
 export function addCalender(calender) {
   return new Promise((resolve, reject) => {
     db.transaction(tx => {
-      tx.executeSql("INSERT INTO calenders (id, title, name, color, source, isSynced) values (?, ?, ?, ?, ?, ?);",
+      tx.executeSql(`INSERT INTO calenders (id, title, name, color, source, isSynced, enableSync) values (?, ?, ?, ?, ?, ?, 0);`,
         [calender.id, calender.title, calender.name, calender.color, calender.source.name, calender.isSynced],
         (txn, result) => resolve(result),
         (txn, err) => reject(err.message)
@@ -65,6 +66,19 @@ export function deleteCalenders() {
       tx.executeSql(
         `DELETE FROM calenders;`,
         [],
+        (txn, result) => resolve(result),
+        (txn, err) => reject(err.message)
+      );
+    });
+  });
+}
+
+export function enableCalenderSync(id, flag) {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `UPDATE calenders SET enableSync = ? where id = ?;`,
+        [flag, id],
         (txn, result) => resolve(result),
         (txn, err) => reject(err.message)
       );

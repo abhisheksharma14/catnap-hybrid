@@ -18,6 +18,7 @@ export default function Splash({ navigation }) {
       setTimeout(() => navigation.navigate('Home'), 4000)
     })();
   })
+
   return (
     <View
       style={{
