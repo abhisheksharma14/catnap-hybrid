@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import * as Job from './src/services/background';
 import SplashScreen from "./src/screens/splash";
 import Home from "./src/screens/home";
+import Events from "./src/screens/events";
 
 const Stack = createStackNavigator();
 
@@ -38,6 +39,7 @@ export default function App() {
             textAlign: 'center',
           },
         }}/>
+        <Stack.Screen name="Events" component={Events} />
       </Stack.Navigator>
     </NavigationContainer>
   );
